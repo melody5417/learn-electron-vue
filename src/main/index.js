@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+import showSameEntryWindow from './sameEntryWindow'
 
 /**
  * Set `__static` path to static files in production
@@ -20,9 +21,9 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
-    useContentSize: true,
-    width: 1000,
+    width: 300,
+    height: 400,
+    title: 'Main Window',
     webPreferences: {
       nodeIntegration: true
     }
@@ -35,7 +36,10 @@ function createWindow () {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  showSameEntryWindow()
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
