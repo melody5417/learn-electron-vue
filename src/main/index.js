@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+import showAnotherEntryWindow from './anotherEntryWindow'
 import showSameEntryWindow from './sameEntryWindow'
 
 /**
@@ -13,8 +14,8 @@ if (process.env.NODE_ENV !== 'development') {
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080`
-  : `file://${__dirname}/index.html`
+  ? `http://localhost:9080/page1.html`
+  : `file://${__dirname}/page1.html`
 
 function createWindow () {
   /**
@@ -39,6 +40,7 @@ function createWindow () {
 app.on('ready', () => {
   createWindow()
   showSameEntryWindow()
+  showAnotherEntryWindow()
 })
 
 app.on('window-all-closed', () => {

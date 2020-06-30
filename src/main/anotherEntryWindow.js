@@ -1,8 +1,8 @@
 import { BrowserWindow } from 'electron'
 
 const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/page1.html#/same-entry-page`
-  : `file://${__dirname}/page1.html`
+  ? `http://localhost:9080/page2.html`
+  : `file://${__dirname}/page2.html`
 
 // eslint-disable-next-line no-unused-vars
 let window = null
@@ -11,7 +11,7 @@ function createWindow () {
   window = new BrowserWindow({
     width: 300,
     height: 400,
-    title: 'Same Entry Window',
+    title: 'page2',
     webPreferences: {
       backgroundThrottling: false,
       nodeIntegration: true // Electron升级到5.0以上之后，在创建窗口的时候需要手动开启node集成

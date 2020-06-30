@@ -11,6 +11,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+// 多页面应用配置
+const { entries, htmlPlugin } = require('./muti-page.config')
 
 /**
  * List of node_modules to include in webpack bundle
@@ -23,9 +25,7 @@ let whiteListedModules = ['vue']
 
 let rendererConfig = {
   devtool: '#cheap-module-eval-source-map',
-  entry: {
-    renderer: path.join(__dirname, '../src/renderer/main.js')
-  },
+  entry: entries,
   externals: [
     ...Object.keys(dependencies || {}).filter(d => !whiteListedModules.includes(d))
   ],
@@ -122,33 +122,9 @@ let rendererConfig = {
   plugins: [
     new VueLoaderPlugin(),
     new MiniCssExtractPlugin({filename: 'styles.css'}),
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: path.resolve(__dirname, '../src/index.ejs'),
-      templateParameters(compilation, assets, options) {
-        return {
-          compilation: compilation,
-          webpack: compilation.getStats().toJson(),
-          webpackConfig: compilation.options,
-          htmlWebpackPlugin: {
-            files: assets,
-            options: options
-          },
-          process,
-        };
-      },
-      minify: {
-        collapseWhitespace: true,
-        removeAttributeQuotes: true,
-        removeComments: true
-      },
-      nodeModules: process.env.NODE_ENV !== 'production'
-        ? path.resolve(__dirname, '../node_modules')
-        : false
-    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
-  ],
+  ].concat(htmlPlugin()),
   output: {
     filename: '[name].js',
     libraryTarget: 'commonjs2',
@@ -157,7 +133,10 @@ let rendererConfig = {
   resolve: {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
+      'assets': path.join(__dirname, '../src/renderer/assets'),
+      'main': path.join(__dirname, '../src/main'),
+      'renderer': path.join(__dirname, '../src/renderer')
     },
     extensions: ['.js', '.vue', '.json', '.css', '.node']
   },
