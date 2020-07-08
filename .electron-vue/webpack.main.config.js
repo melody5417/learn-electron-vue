@@ -15,6 +15,7 @@ let mainConfig = {
   externals: [
     ...Object.keys(dependencies || {})
   ],
+  devtool: "source-map",
   module: {
     rules: [
       {
