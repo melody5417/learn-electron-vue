@@ -1,5 +1,6 @@
 'use strict'
 
+import DB from 'db/index'
 import { app, BrowserWindow } from 'electron'
 import showAnotherEntryWindow from './anotherEntryWindow'
 import showSameEntryWindow from './sameEntryWindow'
@@ -41,6 +42,7 @@ app.on('ready', () => {
   createWindow()
   showSameEntryWindow()
   showAnotherEntryWindow()
+  DB.sharedInstance()
 })
 
 app.on('window-all-closed', () => {
