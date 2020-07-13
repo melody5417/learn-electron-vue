@@ -1,7 +1,7 @@
 'use strict'
 
-import DB from 'db/index'
 import { app, BrowserWindow } from 'electron'
+import DB from 'src/db/index'
 import showAnotherEntryWindow from './anotherEntryWindow'
 import showSameEntryWindow from './sameEntryWindow'
 

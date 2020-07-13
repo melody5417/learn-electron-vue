@@ -17,6 +17,10 @@ const DB_PATH = path.join(STORE_PATH, `/${pkg.name}.db`)
 console.log('db: ', DB_PATH)
 
 class DB {
+  /**
+   * Creates an instance of DB.
+   * @memberof DB
+   */
   constructor () {
     this.connect()
       .then(() => this.createTables())
@@ -25,11 +29,24 @@ class DB {
       })
   }
 
+  /**
+   * Get shared instance of DB.
+   *
+   * @static
+   * @returns The shared instance of DB.
+   * @memberof DB
+   */
   static sharedInstance () {
     this.instance = this.instance ? this.instance : new DB()
     return this.instance
   }
 
+  /**
+   * Connect to the database.
+   *
+   * @returns
+   * @memberof DB
+   */
   connect () {
     return new Promise((resolve, reject) => {
       this.db = new sqlite.Database(DB_PATH, (err) => {
@@ -44,6 +61,12 @@ class DB {
     })
   }
 
+  /**
+   * Create tables and insert default data.
+   *
+   * @returns
+   * @memberof DB
+   */
   createTables () {
     return new Promise((resolve, reject) => {
       const filePath = path.join(__dirname, '/sqlite.sql')
@@ -60,11 +83,25 @@ class DB {
     })
   }
 
+  /**
+   * Close the database.
+   *
+   * @memberof DB
+   */
   close () {
     console.log('Close db')
     this.db.close()
   }
 
+  /**
+   * Runs the SQL query with the specified parameters and calls the callback afterwards.
+   * It does not retrieve any result data.
+   *
+   * @param {*} sql
+   * @param {*} [params=[]]
+   * @returns
+   * @memberof DB
+   */
   run (sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
@@ -78,6 +115,14 @@ class DB {
     })
   }
 
+  /**
+   * Runs all SQL queries in the supplied string.
+   * No result rows are retrieved.
+   *
+   * @param {*} sql
+   * @returns
+   * @memberof DB
+   */
   exec (sql) {
     return new Promise((resolve, reject) => {
       this.db.exec(sql, (err) => {
@@ -91,6 +136,14 @@ class DB {
     })
   }
 
+  /**
+   * Executes the statement and retrieves the first result row.
+   *
+   * @param {*} sql
+   * @param {*} [params=[]]
+   * @returns
+   * @memberof DB
+   */
   get (sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.get(sql, params, (err, data) => {
@@ -104,6 +157,14 @@ class DB {
     })
   }
 
+  /**
+   * Executes the statement and calls the callback with all result rows.
+   *
+   * @param {*} sql
+   * @param {*} [params=[]]
+   * @returns
+   * @memberof DB
+   */
   all (sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, data) => {

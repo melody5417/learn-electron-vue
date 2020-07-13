@@ -1,6 +1,19 @@
 <template>
-  <div id="wrapper">
-    page1
+  <div id="welcome-context">
+    <ul class="entry-list">
+      <li class="entry">
+        <a class="entry-link" href="">
+          <div class="content-box">
+            <div class="info-box">
+              <div class="info-row meta-row"></div>
+              <div class="info-row title-row"></div>
+              <div class="info-row action-row"></div>
+            </div>
+            <div class="thumb"></div>
+          </div>
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 

@@ -56,7 +56,6 @@ let mainConfig = {
     alias: {
       '@': path.join(__dirname, '../src/renderer'),
       'src': path.join(__dirname, '../src'),
-      'db': path.join(__dirname, '../src/db'),
       'assets': path.join(__dirname, '../src/renderer/assets'),
       'main': path.join(__dirname, '../src/main'),
       'renderer': path.join(__dirname, '../src/renderer')
