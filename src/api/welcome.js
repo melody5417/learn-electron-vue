@@ -28,10 +28,15 @@ async function getWelcomeListLocal (req) {
   const results = await db.all(sql, sqlInput)
   return Promise.all(
     results.map(async item => {
-      item.category = await db.get('select * from category where id = ?', [item.category])
+      const categoryPromise = db.get('select * from category where id = ?', [item.category])
       const tags = item.tags.split(',').map(item => { return ('"' + item + '"') }).join(',')
-      item.tags = await db.all('select * from tag where id in (' + tags + ')', [])
-      item.user = await db.get('select * from user where id = ?', [item.user])
+      const tagPromise = await db.all('select * from tag where id in (' + tags + ')', [])
+      const userPromise = await db.get('select * from user where id = ?', [item.user])
+      Promise.all([categoryPromise, tagPromise, userPromise]).then(values => {
+        item.category = values[0]
+        item.tags = values[1]
+        item.user = values[2]
+      })
       return item
     })
   )
