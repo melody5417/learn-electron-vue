@@ -103,6 +103,7 @@ class DB {
    * @memberof DB
    */
   run (sql, params = []) {
+    console.log('Running sql: ' + sql + ' params: ' + params)
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, (err) => {
         if (err) {
@@ -124,6 +125,7 @@ class DB {
    * @memberof DB
    */
   exec (sql) {
+    console.log('Running sql: ' + sql)
     return new Promise((resolve, reject) => {
       this.db.exec(sql, (err) => {
         if (err) {
@@ -145,6 +147,7 @@ class DB {
    * @memberof DB
    */
   get (sql, params = []) {
+    console.log('Running sql: ' + sql + ' params: ' + params)
     return new Promise((resolve, reject) => {
       this.db.get(sql, params, (err, data) => {
         if (err) {
@@ -166,6 +169,7 @@ class DB {
    * @memberof DB
    */
   all (sql, params = []) {
+    console.log('Running sql: ' + sql + ' params: ' + params)
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, data) => {
         if (err) {
