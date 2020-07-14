@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LandingPage from '../components/LandingPage'
 import SameEntryPage from '../components/SameEntryPage.vue'
+import Welcome from '../components/Welcome'
 
 Vue.use(Router)
 
@@ -9,8 +9,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'landing-page',
-      component: LandingPage
+      component: Welcome
     },
     {
       path: '/same-entry-page',

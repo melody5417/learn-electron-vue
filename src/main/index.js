@@ -2,8 +2,6 @@
 
 import { app, BrowserWindow } from 'electron'
 import DB from 'src/db/index'
-import showAnotherEntryWindow from './anotherEntryWindow'
-import showSameEntryWindow from './sameEntryWindow'
 
 /**
  * Set `__static` path to static files in production
@@ -39,10 +37,8 @@ function createWindow () {
 }
 
 app.on('ready', () => {
-  createWindow()
-  showSameEntryWindow()
-  showAnotherEntryWindow()
   DB.sharedInstance()
+  createWindow()
 })
 
 app.on('window-all-closed', () => {
