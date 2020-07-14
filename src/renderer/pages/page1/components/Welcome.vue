@@ -5,7 +5,7 @@
         <a class="entry-link" :href="item.originalUrl">
           <div class="content-box">
             <div class="info-box">
-              <div class="info-row meta-row"></div>
+              <div class="info-row meta-row">{{item.category.name}}</div>
               <div class="info-row title-row">{{item.title}}</div>
               <div class="info-row action-row"></div>
             </div>
@@ -28,9 +28,7 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
-      this.fetchWelcome()
-    }, 100)
+    this.fetchWelcome()
   },
   methods: {
     fetchWelcome () {

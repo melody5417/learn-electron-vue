@@ -19,13 +19,17 @@ function getWelcomeList (req) {
  * @param {uint} req.pageNum 第几页
  * @param {uint} req.pageSize 每页个数
  */
-function getWelcomeListLocal (req) {
+async function getWelcomeListLocal (req) {
   console.log('getWelcomeListLocal', JSON.stringify(req))
   let condition = ``
   let sql = 'select * from welcome where 1=1 ' + condition + ' order by createdAt limit ? offset ?'
   let sqlInput = [req.pageSize, (req.pageNum - 1) * req.pageSize]
   console.log('getWelcomeListLocal', sql, JSON.stringify(sqlInput))
-  return db.all(sql, sqlInput)
+  const results = await db.all(sql, sqlInput)
+  results.map(async item => {
+    item.category = await db.get('select * from category where id = ?', [item.category])
+  })
+  return results
 }
 
 export {
