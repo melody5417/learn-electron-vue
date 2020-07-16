@@ -9,7 +9,7 @@ const db = DB.sharedInstance()
  */
 function getWelcomeList (req) {
   console.log('getWelcomeList', JSON.stringify(req))
-  return getWelcomeListLocal(req)
+  return getWelcomeListLocal_(req)
 }
 
 /**
@@ -19,7 +19,7 @@ function getWelcomeList (req) {
  * @param {uint} req.pageNum 第几页
  * @param {uint} req.pageSize 每页个数
  */
-async function getWelcomeListLocal (req) {
+async function getWelcomeListLocal_ (req) {
   console.log('getWelcomeListLocal', JSON.stringify(req))
   let condition = ``
   let sql = 'select * from welcome where 1=1 ' + condition + ' order by createdAt limit ? offset ?'
@@ -42,6 +42,19 @@ async function getWelcomeListLocal (req) {
   )
 }
 
+/**
+ * 从数据库中删除一条welcome记录
+ *
+ * @param {Object} req
+ * @param {String} req.id 记录id
+ */
+function deleteWelcome (req) {
+  console.log('deleteWelcome', JSON.stringify(req))
+  let sql = `delete from welcome where id = '${req.id}'`
+  return db.exec(sql)
+}
+
 export {
-  getWelcomeList
+  getWelcomeList,
+  deleteWelcome
 }
