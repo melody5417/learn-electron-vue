@@ -1,4 +1,5 @@
 import DB from 'db/index'
+import Common from 'src/util/common'
 
 const db = DB.sharedInstance()
 
@@ -15,17 +16,37 @@ function getWelcomeList (req) {
 /**
  * 从数据库读取缓存推荐列表
  *
- * @param {Object} req
- * @param {uint} req.pageNum 第几页
- * @param {uint} req.pageSize 每页个数
+ * @param {Object}  req
+ * @param {String}  req.title       文章标题，根据文章标题模糊查询
+ * @param {uint}    req.pageNum     分页参数 页数
+ * @param {uint}    req.pageSize    分页参数 每页显示条数
  */
 async function getWelcomeListLocal_ (req) {
   console.log('getWelcomeListLocal', JSON.stringify(req))
+
+  if (!req || !Common.isNumber(req.pageNum) ||
+  !Common.isNumber(req.pageSize)) {
+    return {
+      errCode: -1,
+      errMsg: '参数缺失或格式不正确'
+    }
+  }
+
+  const pageNum = req.pageNum
+  const pageSize = req.pageSize
+  const start = pageSize * (pageNum - 1)
   let condition = ``
-  let sql = 'select * from welcome where 1=1 ' + condition + ' order by createdAt limit ? offset ?'
-  let sqlInput = [req.pageSize, (req.pageNum - 1) * req.pageSize]
-  console.log('getWelcomeListLocal', sql, JSON.stringify(sqlInput))
-  const results = await db.all(sql, sqlInput)
+  const condArr = []
+
+  if (req.title) {
+    condition += ' and title like ?'
+    condArr.push('%' + req.title + '%')
+  }
+  condition += ` order by createdAt limit ${pageSize} offset ${start}`
+
+  let sql = `select * from welcome where 1=1 ${condition}`
+  console.log('getWelcomeListLocal', sql, JSON.stringify(condArr))
+  const results = await db.all(sql, condArr)
   return Promise.all(
     results.map(async item => {
       const categoryPromise = db.get('select * from category where id = ?', [item.category])

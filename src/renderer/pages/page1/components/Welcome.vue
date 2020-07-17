@@ -41,6 +41,7 @@ export default {
       const params = {
         pageNum: 0,
         pageSize: 5
+        // title: '我'
       }
       request.getWelcomeList(params)
         .then(data => {
