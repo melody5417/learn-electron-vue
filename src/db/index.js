@@ -125,7 +125,7 @@ class DB {
    * @memberof DB
    */
   exec (sql) {
-    console.log('Running sql: ' + sql)
+    // console.log('Running sql: ' + sql)
     return new Promise((resolve, reject) => {
       this.db.exec(sql, (err) => {
         if (err) {

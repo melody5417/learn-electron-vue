@@ -8,26 +8,34 @@ import DB from 'src/db/index'
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  global.__static = require('path')
+    .join(__dirname, '/static')
+    .replace(/\\/g, '\\\\')
 }
 
 app.allowRendererProcessReuse = true
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:9080/page1.html`
-  : `file://${__dirname}/page1.html`
+const winURL =
+  process.env.NODE_ENV === 'development'
+    ? `http://localhost:9080/page1.html`
+    : `file://${__dirname}/page1.html`
 
 function createWindow () {
   /**
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    width: 300,
-    height: 400,
-    title: 'Main Window',
+    width: 1920,
+    height: 1080,
+    minWidth: 1920,
+    minHeight: 1080,
     webPreferences: {
-      nodeIntegration: true
+      webSecurity: false,
+      nodeIntegration: true,
+      webviewTag: true,
+      enableRemoteModule: true
+      // zoomFactor: zoomLevelToZoomFactor(windowSettings?.zoomLevel),
     }
   })
 
@@ -38,9 +46,14 @@ function createWindow () {
   })
 }
 
+app.on('will-resize', event => {
+  console.log('will-resize', event)
+})
+
 app.on('ready', () => {
   DB.sharedInstance()
   createWindow()
+  require('./windowManager')
 })
 
 app.on('window-all-closed', () => {
