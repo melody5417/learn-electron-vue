@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow } from 'electron'
 import DB from 'src/db/index'
+import { WindowManager } from './windowManager'
 
 /**
  * Set `__static` path to static files in production
@@ -25,18 +26,24 @@ function createWindow () {
   /**
    * Initial window options
    */
+  const options = WindowManager.sharedInstance().getMainCreateOptions()
   mainWindow = new BrowserWindow({
-    width: 1920,
-    height: 1080,
-    minWidth: 1920,
-    minHeight: 1080,
+    width: options.width,
+    height: options.height,
+    minWidth: options.minWidth,
+    minHeight: options.minHeight,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true,
       webviewTag: true,
-      enableRemoteModule: true
-      // zoomFactor: zoomLevelToZoomFactor(windowSettings?.zoomLevel),
+      enableRemoteModule: true,
+      zoomFactor: options.zoomFactor || 1.0 // not work
     }
+  })
+  mainWindow.identify = options.identify
+
+  mainWindow.webContents.on('did-finish-load', function () {
+    mainWindow.webContents.setZoomFactor(options.zoomFactor || 1.0)
   })
 
   mainWindow.loadURL(winURL)
@@ -52,8 +59,9 @@ app.on('will-resize', event => {
 
 app.on('ready', () => {
   DB.sharedInstance()
+  WindowManager.sharedInstance()
+
   createWindow()
-  require('./windowManager')
 })
 
 app.on('window-all-closed', () => {
